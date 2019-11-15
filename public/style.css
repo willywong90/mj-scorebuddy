@@ -1,0 +1,175 @@
+/* styles */
+/* called by your view template */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Benton Sans", "Helvetica Neue", helvetica, arial, sans-serif;
+  margin: 1em;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+p {
+  max-width: 600px;
+}
+
+input[type=text] {
+  display: inline-block;
+  width: 100%;
+}
+
+select {
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+  float: right;
+  font-size: 16px;
+  padding: 5px;
+}
+
+input[name=selfTouch] {
+  float: right;
+  position: relative;
+  top: 5px;
+}
+
+input::after {
+  clear: both;
+}
+
+button {
+  background-color: #bfbfbf;
+  border: 0;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 6px 12px;
+}
+button:hover {
+  background-color: #d3d3d3;
+}
+
+button.button-purple {
+  background-color: #823aa0;
+}
+button.button-purple:hover {
+  background-color: #9e54bd;
+}
+
+button.button-blue {
+  background-color: #226fbe;
+}
+button.button-blue:hover {
+  background-color: #4593e3;
+}
+
+button.button-green {
+  background-color: #17aa56;
+}
+button.button-green:hover {
+  background-color: #2ac56c;
+}
+
+button.button-yellow {
+  background-color: #fcad26;
+}
+button.button-yellow:hover {
+  background-color: #fcd04b;
+}
+
+button.button-red {
+  background-color: #cb4e4e;
+}
+button.button-red:hover {
+  background-color: #f06060;
+}
+
+footer {
+  margin-top: 20px;
+  padding-top: 25px;
+  border-top: 1px solid lightgrey;
+}
+
+header h1 a {
+  color: #000;
+}
+
+.gameid {
+  cursor: pointer;
+  font-size: 13px;
+  margin-top: 15px;
+  text-transform: uppercase;
+}
+
+.section-bg {
+  background-color: #F5F5F5;
+  border-radius: 5px;
+  padding: 12px;
+  width: 100%;
+}
+
+.add-score-form {
+  float: left;
+  margin-bottom: 25px;
+  margin-right: 15px;
+  max-width: 200px;
+}
+
+.new-game-form {
+  max-width: 250px;
+}
+
+.form-section {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.button-container {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+#add-score {
+  float: right;
+  margin-top: 15px;
+}
+
+#start-game {
+  margin-top: 15px;
+}
+
+#reset-game {
+  margin-top: 30px;
+}
+
+#game-list {
+  width: 250px;
+}
+
+.game-list-row {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.game-list-row span {
+  font-size: 12px;
+  margin-left: 8px;
+}
+
+#scoresheet {
+  float: left;
+  width: 150px;
+}
+
+#scoresheet div:first-child {
+  font-weight: 600;
+}
+
+#scoresheet div:nth-child(4) {
+  color: #D32904;
+}
