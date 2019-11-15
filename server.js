@@ -2,9 +2,9 @@
 // where your node app starts
 
 // init project
-var express = require('express');
-var bodyParser = require('body-parser');
-var app = express();
+const express = require('express');
+const bodyParser = require('body-parser');
+const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -12,23 +12,23 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 // init sqlite db
-var fs = require('fs');
-var dbFile = './.data/sqlite.db';
-var exists = fs.existsSync(dbFile);
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database(dbFile);
+const fs = require('fs');
+const dbFile = './.data/sqlite.db';
+const exists = fs.existsSync(dbFile);
+const sqlite3 = require('sqlite3').verbose();
+const db = new sqlite3.Database(dbFile);
 
-function createId() {
-  var text = "";
-  var possible = "abcdefghijklmnopqrstuvwxyz";
+const createId = () => {
+  let text = "";
+  const possible = "abcdefghijklmnopqrstuvwxyz";
 
-  for (var i = 0; i < 5; i++)
+  for (let i = 0; i < 5; i++)
     text += possible.charAt(Math.floor(Math.random() * possible.length));
 
   return text;
 }
 
-const createScoringTable = function() {
+const createScoringTable = () => {
   db.run('CREATE TABLE Scoring (Fan INTEGER, Win INTEGER, SelfTouch INTEGER)');
   console.log('New table Scoring created!');
 
@@ -38,7 +38,7 @@ const createScoringTable = function() {
 }
 
 // if ./.data/sqlite.db does not exist, create it
-db.serialize(function(){
+db.serialize(() => {
   if (!exists) {
     createScoringTable();
     db.run('CREATE TABLE ScoreHistory (GameId TEXT, Player TEXT, Score INTEGER)'); 
@@ -47,27 +47,27 @@ db.serialize(function(){
 });
 
 // http://expressjs.com/en/starter/basic-routing.html
-app.get('/', function(request, response) {
+app.get('/', (request, response) => {
   response.sendFile(__dirname + '/views/index.html');
 });
 
-app.get('/getFan', function(request, response) {
-  db.all('SELECT Fan from Scoring', function(err, rows) {
+app.get('/getFan', (request, response) => {
+  db.all('SELECT Fan from Scoring', (err, rows) => {
     response.send(JSON.stringify(rows));
   });
 });
 
-app.get('/getGames', function(request, response) {
-  db.all('SELECT * from GameHistory', function(err, rows) {
+app.get('/getGames', (request, response) => {
+  db.all('SELECT * from GameHistory', (err, rows) => {
     response.send(JSON.stringify(rows));
   }); 
 });
 
 app.route('/new')
-  .get(function(request, response) {
+  .get((request, response) => {
     response.sendFile(__dirname + '/views/new-game.html');
   })
-  .post(function(request, response) {
+  .post((request, response) => {
     const gameId = createId();
     const player1 = request.body.player1;
     const player2 = request.body.player2;
@@ -81,12 +81,12 @@ app.route('/new')
     response.send({ url: '/game/' + gameId });
   });
 
-app.get('/game/:gameId?', function (request, response) {
+app.get('/game/:gameId?', (request, response) => {
   const gameId = request.params.gameId;
   
   if (gameId) {
     const sql = `SELECT GameId from GameHistory WHERE GameId = "${gameId}"`;
-    db.all(sql, function(err, rows) {
+    db.all(sql, (err, rows) => {
       if (rows.length > 0) {
         response.sendFile(__dirname + '/views/game.html');
       } else {
@@ -98,12 +98,12 @@ app.get('/game/:gameId?', function (request, response) {
   }
 })
 
-app.get('/resetGame/:gameId?', function(request, response) {
+app.get('/resetGame/:gameId?', (request, response) => {
   const gameId = request.params.gameId;
   
   if (gameId) {
     const sql = `Delete from ScoreHistory WHERE GameId = "${gameId}"`;
-    db.all(sql, function(err, rows) {
+    db.all(sql, (err, rows) => {
       if (err) {
         response.send(err);
       } else {
@@ -113,29 +113,29 @@ app.get('/resetGame/:gameId?', function(request, response) {
   }
 });
 
-app.get('/getPlayers/:gameId?', function(request, response) {
+app.get('/getPlayers/:gameId?', (request, response) => {
   const gameId = request.params.gameId;
   
   if (gameId) {
     const sql = `SELECT DISTINCT Player from ScoreHistory WHERE GameId = "${gameId}" ORDER BY Player`;
-    db.all(sql, function(err, rows) {
+    db.all(sql, (err, rows) => {
       response.send(JSON.stringify(rows));
     });
   }
 });
 
-app.get('/getScore/:gameId?', function(request, response) {
+app.get('/getScore/:gameId?', (request, response) => {
   const gameId = request.params.gameId;
   
   if (gameId) {
     const sql = `SELECT Player, SUM(Score) AS Score from ScoreHistory WHERE GameId = "${gameId}" GROUP BY Player ORDER BY Score Desc`;
-    db.all(sql, function(err, rows) {
+    db.all(sql, (err, rows) => {
       response.send(JSON.stringify(rows));
     });
   }
 });
 
-app.post('/updateScore/:gameId', function(request, response) {
+app.post('/updateScore/:gameId', (request, response) => {
   const gameId = request.params.gameId;
   const winner = request.body.winner;
   const loser = request.body.loser;
@@ -144,13 +144,13 @@ app.post('/updateScore/:gameId', function(request, response) {
   const players = request.body.players;
   let sql = 'INSERT INTO ScoreHistory (GameId, Player, Score) Values ';
 
-  db.get('SELECT Win, SelfTouch from Scoring Where Fan = ?', fan, function(err, row, fields) {
+  db.get('SELECT Win, SelfTouch from Scoring Where Fan = ?', fan, (err, row, fields) => {
     if (err) {
     } else {
       if (selfTouch) {
         let values = [];
         
-        for (var i = 0; i < players.length; i++) {
+        for (let i = 0; i < players.length; i++) {
           let valueString = '';
           
           if (players[i] === winner) {
@@ -175,6 +175,6 @@ app.post('/updateScore/:gameId', function(request, response) {
 });
 
 // listen for requests :)
-var listener = app.listen(process.env.PORT, function() {
+const listener = app.listen(process.env.PORT, () => {
   console.log('Your app is listening on port ' + listener.address().port);
 });
